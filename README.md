@@ -11,12 +11,12 @@ The data was downloaded from Kaggle, curtesy of KNIGHT BEARR.
 The project implementation was inspired by Angelina Frimpong’s YouTube teaching.
 
 ### Data Attributes:
-•	Order ID - An Order ID is the number system that Amazon uses exclusively to keep track of orders. Each order receives its own Order ID that will not be duplicated. This number can be useful to the seller when attempting to find out certain details about an order such as shipment date or status.
-•	Product - The product that have been sold.
-•	Quantity Ordered - Ordered Quantity is the total item quantity ordered in the initial order (without any changes).
-•	Price Each - The price of each products.
-•	Order Date - This is the date the customer is requesting the order be shipped.
-•	Purchase Address - The purchase order is prepared by the buyer, often through a purchasing department. The purchase order, or PO, usually includes a PO number, which is useful in matching shipments with purchases; a shipping date; billing address; shipping address; and the request items, quantities and price.
+*	Order ID - An Order ID is the number system that Amazon uses exclusively to keep track of orders. Each order receives its own Order ID that will not be duplicated. This number can be useful to the seller when attempting to find out certain details about an order such as shipment date or status.
+*	Product - The product that have been sold.
+*	Quantity Ordered - Ordered Quantity is the total item quantity ordered in the initial order (without any changes).
+*	Price Each - The price of each products.
+*	Order Date - This is the date the customer is requesting the order be shipped.
+*	Purchase Address - The purchase order is prepared by the buyer, often through a purchasing department. The purchase order, or PO, usually includes a PO number, which is useful in matching shipments with purchases; a shipping date; billing address; shipping address; and the request items, quantities and price.
 
 The dataset was a CSV file, which came in 12 files, each representing each month. There were a total of 186,851 records.
  
@@ -24,32 +24,33 @@ Here is a peep look at the dataset structure:
  
 
 
-Objective Of The Analysis
+## Objective Of The Analysis
 The main objective of this sales analysis is to evaluate a the sales trends to know the strengths and weaknesses of each KPI. 
 
 
-Key Questions To Answer:
-•	Q: What was the best month for sales? How much was earned that month?
-•	Q: What was the best selling product?
-•	Q: What City had the highest number of sales? 
-•	Q: What products were bought together?
-•	Q: Category and percentage of customers bought Recently, Frequently and How much do they buy (RFM)? 
+### Key Questions To Answer:
+*	Q: What was the best month for sales? How much was earned that month?
+*	Q: What was the best selling product?
+*	Q: What City had the highest number of sales? 
+*	Q: What products were bought together?
+*	Q: Category and percentage of customers bought Recently, Frequently and How much do they buy (RFM)? 
 
-Data Analytic Tool
+### Data Analytic Tool
 For this project, Python, SQL - CTE (via BigQuery platform) and Tableau were used.
 
-Data Preparations
+##  Data Preparations
 The downloaded dataset was merged into 1 file using a python script and named “sales_data.csv”.
 
 The csv file was imported into Google’s cloud-based BigQuery, where SQL was used to inspect and clean the dataset first before analysis began. The following are some of the cleaning done:
-•	Checking the records, there were 545 empty rows. These were removed.
-•	Duplicates were checked. Since OrderID can possibly be repeated if  different products were bought together, these had to be cheched based on a combination of OrderID, ProductName, Order Date. None was found.
-•	Finally, Column titles were changed to something easy to work with.
+*	*Checking the records, there were 545 empty rows. These were removed.*
+*	*Duplicates were checked. Since OrderID can possibly be repeated if  different products were bought together, these had to be cheched based on a combination of OrderID, ProductName, Order Date. None was found.*
+*	*Finally, Column titles were changed to something easy to work with.*
 
 
-Data Cleaning
+### Data Cleaning
 The SQL codes used to clean these records are:
 
+#### Python Code
 ```
 ####merge_data.py####
 ##Import modules
@@ -72,7 +73,7 @@ for file in files:
 all_data.to_csv("data/sales_data.csv", index=False)
 ```
 
-####SQL CODES####
+#### SQL Codes Using BigQuery Platform
 
 ```
 -- Rename  fields
@@ -129,19 +130,19 @@ SELECT distinct city FROM `sales-371417.sales_data.clean_sales`;
 ```
 
 
-Data Processing & Analysis
+## Data Processing & Analysis
 
-Data Preparations
+### Data Preparations
 We need to generate so extra columns to make the data rich. 
 These are:
-1.	Unique Identifier (CustomerID)
-2.	Total Amount Spent
-3.	Year
-4.	Month
-5.	City
-6.	State
+1.	*Unique Identifier (CustomerID)*
+2.	*Total Amount Spent*
+3.	*Year*
+4.	*Month*
+5.	*City*
+6.	*State*
 
-
+#### Using SQL CTE
 ```
 With wt_total AS
 (
@@ -191,18 +192,18 @@ Here is the output:
  
 
 
-Data Analysis
+### Data Analysis
 
 Now let get some insights from the data.
 
-##### Insights
+#### Insights
 
 ```
 -- --Best selling Month 
 SELECT Month,Year, sum(Amt_Spent) Revenue, count(OrderID) Frequency FROM `sales-371417.sales_data.processed_sales` Group By Month, Year order by Year, Revenue desc;
 ```
  
-Observation:
+#### Observation:
 December has highest sales, while January has lowest
 
 ```
@@ -211,7 +212,7 @@ SELECT State, SUM(Amt_Spent) Revenue FROM `sales-371417.sales_data.processed_sal
 ```
 
  
-Observation:
+#### Observation:
 CA – California State has the highest revenue
 And San Francisco the highest City.
 
@@ -222,7 +223,7 @@ SELECT ProductName, sum(Amt_Spent) Revenue FROM `sales-371417.sales_data.process
  
 
 
-Observation:
+#### Observation:
 MacbookPro has highest sales, while AAA Batteries has lowest
 
 
@@ -247,24 +248,25 @@ SELECT a.ProductName AS original_Product, b.ProductName AS bought_with, count(*)
 ```
  
 
-Next we generate the RFM.
+**Next we generate the RFM.**
 
 RFM means Recency, Frequency and Monetary. This used to segment customers according to how recently they still bought products, how frequently the come back, how much they often spend. These will help us know which customers are loyal and those we are loosing.
 
 In this analysis, we have will categorize customers into 5 levels:
-•	Super Customers
-•	Loyal Customers
-•	Potential Loyalists
-•	New Customers and 
-•	Churning Customers
-T achieve this, we need to derive some more columns from our dataset. These are:
-•	Recency
-•	Frequency
-•	Monetary
-•	RFM Scores
-•	RFM Levels
+*	*Super Customers*
+*	*Loyal Customers*
+*	*Potential Loyalists*
+*	*New Customers and*
+*	*Churning Customers*
 
+To achieve this, we need to derive some more columns from our dataset. These are:
+*	*Recency*
+*	*Frequency*
+*	*Monetary*
+*	*RFM Scores*
+*	*RFM Levels*
 
+#### Using a complex SQL CTE
 ```
 --RFM 
 WITH rfm AS
@@ -328,7 +330,7 @@ SELECT ROW_NUMBER() OVER(ORDER BY (SELECT 1)) AS ID, CONCAT('CN',CAST((RAND() * 
 SELECT * FROM final; 
 ```
 
-SQL Output:
+#### SQL Output:
  
 
 
@@ -345,22 +347,17 @@ SELECT rfm_level, round(avg(Recency),2) as Recency_Mean, round(avg(Frequency),2)
 ```
  
 
-Data Visualization
+## Data Visualization
 
-Sales Dashboard
+### Sales Dashboard
  
-RFM Dashboard
- 
-
-More here: https://public.tableau.com/app/profile/oladeji.afolabi/viz/SalesDataAnalyticsWithRFM/RFMDashboard_1
-
-
+### RFM Dashboard
  
 
- 
+[More Visualization on Tableau here](https://public.tableau.com/app/profile/oladeji.afolabi/viz/SalesDataAnalyticsWithRFM/RFMDashboard_1)
+
 
  
-
 
  
 
@@ -368,4 +365,9 @@ More here: https://public.tableau.com/app/profile/oladeji.afolabi/viz/SalesDataA
 
 
  
-![image](https://user-images.githubusercontent.com/69392408/208310977-5f8c0426-8e0a-4023-a925-57ef10bd798d.png)
+
+ 
+
+
+ 
+
