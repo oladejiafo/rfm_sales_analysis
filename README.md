@@ -351,12 +351,24 @@ SELECT rfm_level, round(avg(Recency),2) as Recency_Mean, round(avg(Frequency),2)
 ## Data Visualization
 
 ### Sales Dashboard
- 
+ ![Sales Dashboard](https://user-images.githubusercontent.com/69392408/208370011-4778a9b1-8d5a-4f5e-b4f5-1b6b7954ee5d.png)
+
+
 ### RFM Dashboard
- 
+ ![RFM Dashboard](https://user-images.githubusercontent.com/69392408/208370017-f9f0a9e0-58d8-454b-98fd-e97bfca27cec.png)
+
 
 [More Visualization on Tableau here](https://public.tableau.com/app/profile/oladeji.afolabi/viz/SalesDataAnalyticsWithRFM/RFMDashboard_1)
 
+![Sales Distributions Over Cities](https://user-images.githubusercontent.com/69392408/208370252-51f71074-9581-4658-8226-71ab0c872ce2.png)
+
+![Sales Distributions Over Months](https://user-images.githubusercontent.com/69392408/208370349-6ec7567d-2b0d-4663-b872-65e36c022730.png)
+
+![Sales Distributions Over Products](https://user-images.githubusercontent.com/69392408/208370348-1004d8c3-46d7-4e1c-934c-a16158cce7d3.png)
+
+![Sales Distributions](https://user-images.githubusercontent.com/69392408/208370361-929c0aa7-e824-4cd5-a584-b60ffb11f90b.png)
+
+![Products Bought Together](https://user-images.githubusercontent.com/69392408/208370474-c51ccc19-217f-4bc5-ba52-9adb66de95bb.png)
 
  
 
