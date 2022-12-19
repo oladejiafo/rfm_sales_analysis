@@ -7,9 +7,9 @@
 Sales analytics is the practice of generating insights from sales data, trends, and metrics to set targets and forecast future sales performance. Sales analysis is mining your data to evaluate the performance of your sales team against its goals. It provides insights about the top performing and underperforming products/services, the problems in selling and market opportunities, sales forecasting, and sales activities that generate revenue.
 
 ### Data Source:
-The data was downloaded from Kaggle, curtesy of KNIGHT BEARR.
+The data was downloaded from Kaggle, curtesy of [KNIGHT BEARR](https://www.kaggle.com/datasets/knightbearr/sales-product-data).
 
-The project implementation was inspired by Angelina Frimpong’s YouTube teaching.
+The project implementation was inspired by [Angelina Frimpong’s](https://www.youtube.com/watch?v=O2hlHzehZb0) YouTube teaching.
 
 ### Data Attributes:
 *	Order ID - An Order ID is the number system that Amazon uses exclusively to keep track of orders. Each order receives its own Order ID that will not be duplicated. This number can be useful to the seller when attempting to find out certain details about an order such as shipment date or status.
@@ -22,7 +22,7 @@ The project implementation was inspired by Angelina Frimpong’s YouTube teachin
 The dataset was a CSV file, which came in 12 files, each representing each month. There were a total of 186,851 records.
  
 Here is a peep look at the dataset structure:
- 
+![image](https://user-images.githubusercontent.com/69392408/208480939-bdab85b7-c55c-4e61-a279-dd2fc7a53d47.png)
 
 
 ## Objective Of The Analysis
@@ -184,13 +184,9 @@ With wt_total AS
 
 ```
 
-
-
-
-
 Here is the output:
 
- 
+![image](https://user-images.githubusercontent.com/69392408/208481086-0c580008-a231-46b5-a1ef-a183866bd893.png)
 
 
 ### Data Analysis
@@ -203,6 +199,7 @@ Now let get some insights from the data.
 -- --Best selling Month 
 SELECT Month,Year, sum(Amt_Spent) Revenue, count(OrderID) Frequency FROM `sales-371417.sales_data.processed_sales` Group By Month, Year order by Year, Revenue desc;
 ```
+![image](https://user-images.githubusercontent.com/69392408/208481163-b6ed6891-9ad0-4546-b0dc-aa2fe2a78def.png)
  
 #### Observation:
 December has highest sales, while January has lowest
@@ -211,7 +208,7 @@ December has highest sales, while January has lowest
 ---- Sales per state
 SELECT State, SUM(Amt_Spent) Revenue FROM `sales-371417.sales_data.processed_sales` Group By State order by Revenue desc;
 ```
-
+![image](https://user-images.githubusercontent.com/69392408/208481240-165f3a8e-3ef3-4c4d-a1af-74974d2bfad4.png)
  
 #### Observation:
 CA – California State has the highest revenue
@@ -222,7 +219,7 @@ And San Francisco the highest City.
 SELECT ProductName, sum(Amt_Spent) Revenue FROM `sales-371417.sales_data.processed_sales` Group By ProductName order by Revenue desc;
 ```
  
-
+![image](https://user-images.githubusercontent.com/69392408/208481299-c497b2ad-8960-449d-962b-acfdea133bbd.png)
 
 #### Observation:
 MacbookPro has highest sales, while AAA Batteries has lowest
@@ -247,7 +244,8 @@ SELECT a.ProductName AS original_Product, b.ProductName AS bought_with, count(*)
   AND a.ProductName != b.ProductName
  GROUP BY a.ProductName, b.ProductName;
 ```
- 
+![image](https://user-images.githubusercontent.com/69392408/208481388-d50a482e-1bc1-4131-93fb-87c606a0578c.png)
+
 
 **Next we generate the RFM.**
 
@@ -290,7 +288,7 @@ Group By Address order by Monetary desc
 ),
 rfm_tile AS
 (
--- Group customer patronage into 4
+-- Group customer patronage into 3
 SELECT 
 *,
 NTILE(3) OVER(ORDER BY rfm.Recency desc) as rfm_rec_tile,
@@ -332,13 +330,14 @@ SELECT * FROM final;
 ```
 
 #### SQL Output:
- 
+![image](https://user-images.githubusercontent.com/69392408/208481469-af2132d1-1241-423a-b3f3-5a7d395443cd.png)
 
 
 ```
 -- count per level:
 SELECT rfm_level, count(*) as count FROM rfm_levels GROUP BY rfm_level
 ```
+![image](https://user-images.githubusercontent.com/69392408/208481514-9f29794c-0220-4bc1-9f93-6aab220ae964.png)
  
 
 ```
@@ -346,7 +345,8 @@ SELECT rfm_level, count(*) as count FROM rfm_levels GROUP BY rfm_level
 SELECT rfm_level, round(avg(Recency),2) as Recency_Mean, round(avg(Frequency),2) as Frequency_Mean, round(avg(Monetary),2) as Monetary_Mean,  count(*) as count FROM rfm_levels GROUP BY rfm_level order by Frequency_Mean desc
 
 ```
- 
+![image](https://user-images.githubusercontent.com/69392408/208481572-ceff60e1-9890-4f12-a962-3565a828a651.png)
+
 
 ## Data Visualization
 
